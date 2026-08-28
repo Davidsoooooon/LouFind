@@ -1,5 +1,17 @@
 # Prototype verification
 
+## Vercel deployment fix — 28 August 2026
+
+- Added a separate static export for Vercel. The build renders the homepage and not-found page into `dist/client`; it verifies the homepage and 14 referenced/required local assets before succeeding.
+- A clean `npm ci` succeeds; the updated web dependency audit reports zero known vulnerabilities. The unused root Expo dependency and its deprecated uuid dependency are removed. The separate mobile dependency lockfile is unchanged.
+- All 29 automated tests pass, including four regression cases for a valid static export, missing homepage, missing JavaScript bundle, and an error page masquerading as a successful build.
+- Root TypeScript, mobile TypeScript, and lint pass after the clean install.
+- Both `npm run build` (Cloudflare Worker) and `npm run build:vercel` (static Vercel export) pass. The final static export uses the LouFind manifest and production social image URL, without a localhost metadata origin.
+- The existing Vercel project was updated to Node 22.x and the saved setting was read back successfully. Reviewed esbuild and workerd install-script approvals are pinned to their exact locked versions.
+- These are build, automated behavior, and configuration checks; no new browser workflow or physical iPhone test is claimed for this deployment change.
+
+## Original prototype checks
+
 Verified on 28 August 2026 against the local running application.
 
 - 25 automated tests cover deterministic scoring, exclusion rules, nearby locations, color families, private explanations, draft behavior, matching notification deduplication, claim ownership, duplicate claims, role checks, review decisions, competing claims, storage logs, verified return notifications, linked lost reports, form validation, offline cache behavior, and phone-preview compatibility.

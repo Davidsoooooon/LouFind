@@ -30,7 +30,7 @@ For the first setup, install the separate companion dependencies with `npm --pre
 
 ### Website development
 
-Requires Node.js **22.13 or newer** and npm.
+Requires Node.js **22.x (at least 22.13)** and npm. Vercel also uses Node 22.x.
 
 ```sh
 npm install
@@ -48,6 +48,27 @@ npm run start      # Serve the production Worker locally
 ```
 
 No Supabase account, credentials, external image host, or API key is required. This delivery implements the brief's **local demo fallback**. It does not connect to a live school or Supabase instance.
+
+### Deploy the website on Vercel
+
+The Vercel project is **loufind**, connected to the `main` branch of this repository, with the domain [loufind.vercel.app](https://loufind.vercel.app). Keep the project Root Directory at the repository root (`.`) and Node.js Version at **22.x**. The checked-in `vercel.json` supplies the remaining settings:
+
+| Setting          | Value                  |
+| ---------------- | ---------------------- |
+| Framework preset | Vite                   |
+| Install command  | `npm ci`               |
+| Build command    | `npm run build:vercel` |
+| Output directory | `dist/client`          |
+
+`npm run build:vercel` uses Vinext's static export to generate `index.html`, the not-found page, and browser assets. It fails if the homepage, its scripts, or required assets are missing. The app's `#home`, `#browse`, and other hash links do not need a catch-all URL rewrite.
+
+Do not use the regular `npm run build` output as a static Vercel site: that command produces a Cloudflare Worker, which Vercel's Vite preset does not run. It remains available for the existing Cloudflare development and hosting setup. Both builds use the same app code.
+
+The Vercel build defaults social metadata to `https://loufind.vercel.app`. Set the trusted `PUBLIC_SITE_URL` build environment variable if the production domain changes. After pushing to `main`, wait for the new Vercel deployment to become Ready, then check the public domain; an older deployment's preview does not update itself.
+
+The root `allowScripts` entries approve only the reviewed, locked versions of the esbuild and workerd binary installers. Review these scripts again when upgrading those packages. Expo belongs to the separate `mobile/` project and is not installed by the website build.
+
+**Public hosting does not add shared storage or real authentication.** Each browser still has its own demo reports and accounts. Do not enter real identity documents, confidential reports, or passwords you use elsewhere.
 
 ## Demo accounts
 
