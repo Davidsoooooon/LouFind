@@ -25,7 +25,7 @@ export function NotificationsView({
   return (
     <>
       <ViewHeader
-        title="A little update."
+        title="Notifications"
         description="Matches, claim reviews, and good news from campus."
       >
         <Button
@@ -45,12 +45,14 @@ export function NotificationsView({
       </ViewHeader>
       <div className="tabs activity-tabs">
         <button
+          aria-pressed={!unreadOnly}
           className={!unreadOnly ? 'active' : ''}
           onClick={() => setUnreadOnly(false)}
         >
           All updates
         </button>
         <button
+          aria-pressed={unreadOnly}
           className={unreadOnly ? 'active' : ''}
           onClick={() => setUnreadOnly(true)}
         >

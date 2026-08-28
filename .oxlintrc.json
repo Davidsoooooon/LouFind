@@ -23,7 +23,8 @@
     "typeCheck": true
   },
   "ignorePatterns": [
-    ".next/**",
+    "mobile/**",
+    "**/.next/**",
     ".vinext/**",
     "out/**",
     "build/**",

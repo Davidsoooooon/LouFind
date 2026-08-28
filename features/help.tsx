@@ -26,7 +26,7 @@ export function HelpView({
   return (
     <>
       <ViewHeader
-        title="A little guidance."
+        title="Help & how it works"
         description="Everything you need to report, claim, or return an item."
       />
       <div className="help-steps">
@@ -34,19 +34,19 @@ export function HelpView({
           {
             n: '01',
             icon: FileSearch,
-            title: 'Tell us what’s missing.',
+            title: '1. Report your item',
             text: 'Report the item with a clear description, a photo if you have one, and where you last saw it. Add unique marks to the private details field.',
           },
           {
             n: '02',
             icon: ShieldCheck,
-            title: 'A match is a starting point.',
+            title: '2. Check items & claim',
             text: 'Browse found items or follow a possible match. Submit private details and proof when something looks like yours. Security reviews every claim.',
           },
           {
             n: '03',
             icon: CheckCircle2,
-            title: 'Bring it back home.',
+            title: '3. Verify & collect',
             text: 'Once your claim is approved, bring your school ID to campus security. The officer checks your ID, hands over the item, and records the return.',
           },
         ].map((s) => (
@@ -73,10 +73,11 @@ export function HelpView({
           <details>
             <summary>How do possible matches work?</summary>
             <p>
-              The deterministic score uses category (30 points), text similarity
-              (25), color (15), location (15), date (10), and brand or private
-              feature overlap (5). The result is a similarity score, not a
-              guarantee. No image recognition or AI is used.
+              We compare the item’s category, description, color, location,
+              date, and identifying details. A higher percentage means the
+              reports have more in common. It does not prove ownership: security
+              still needs to review your claim. This demo does not use AI or
+              recognize objects in photos.
             </p>
           </details>
           <details>
@@ -108,34 +109,33 @@ export function HelpView({
         </section>
         <aside className="help-office">
           <ShieldCheck size={30} strokeWidth={1.4} />
-          <h2>Campus Security Office</h2>
-          <p>For handovers, verified pickups, and a helping hand.</p>
+          <h2>Before you collect an item</h2>
+          <p>Wait for approval and read the security review note.</p>
           <div>
             <MapPin size={17} />
-            <span>Main Entrance, Ground Floor</span>
+            <span>Check the pickup instructions in your claim</span>
           </div>
           <div>
             <Clock3 size={17} />
-            <span>
-              Monday–Friday
-              <br />
-              8:00 AM–5:00 PM
-            </span>
+            <span>Confirm the pickup location and time first</span>
           </div>
-          <small>Sample campus details for this prototype.</small>
+          <small>
+            Unofficial prototype. Locations and security workflows are sample
+            data, not SLU service instructions.
+          </small>
           <Button onClick={onReport}>
             Report an item
             <ArrowRight size={15} />
           </Button>
           <Button variant="outline" onClick={onBrowse}>
-            Browse the noticeboard
+            Browse items
           </Button>
         </aside>
       </div>
       <div className="install-panel">
         <div>
-          <h3>A place on your home screen.</h3>
-          <p>Keep FindIt Campus close by for the next familiar find.</p>
+          <h3>Add LouFind to your home screen</h3>
+          <p>Open the app quickly when you need it.</p>
         </div>
         <Button
           variant="outline"

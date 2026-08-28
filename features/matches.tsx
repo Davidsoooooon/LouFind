@@ -19,7 +19,7 @@ export function MatchesView({ onOpen }: { onOpen: (id: string) => void }) {
     <>
       <ViewHeader
         eyebrow="SOME THINGS FIND THEIR WAY BACK"
-        title="A possible reunion."
+        title="Possible matches"
         description="These found items share details with lost reports."
       />
       <div className="info-note">

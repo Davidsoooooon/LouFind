@@ -53,15 +53,22 @@ export function HomeView({
     <>
       <div className="page-heading">
         <div>
-          <div className="eyebrow">YOUR CAMPUS LOST & FOUND</div>
+          <div className="eyebrow">
+            SAINT LOUIS UNIVERSITY · BAGUIO, PHILIPPINES
+          </div>
           <h1>
-            Good morning, {profile.name.split(' ')[0]}
+            Welcome back, {profile.name.split(' ')[0]}
             <span className="greeting-dot">.</span>
           </h1>
-          <p>Let’s get your things back where they belong.</p>
+          <p>Lost something or found an item? Start here.</p>
         </div>
         <span className="date-label">
-          <CalendarDays size={15} /> Friday, August 28
+          <CalendarDays size={15} />{' '}
+          {new Intl.DateTimeFormat('en-US', {
+            weekday: 'long',
+            month: 'long',
+            day: 'numeric',
+          }).format(new Date())}
         </span>
       </div>
       <form
@@ -74,7 +81,7 @@ export function HomeView({
         <Search size={21} strokeWidth={1.7} />
         <input
           aria-label="Search lost and found items"
-          placeholder="What are you looking for? Try “black calculator”"
+          placeholder="Search for an item…"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
         />
@@ -86,14 +93,15 @@ export function HomeView({
       <div className="report-actions">
         <button
           className="report-action lost-action"
+          aria-label="Report a lost item"
           onClick={() => onReport('lost')}
         >
           <SearchX size={34} strokeWidth={1.3} />
           <div>
-            <h2>Lost something?</h2>
-            <p>Let your campus help you find it.</p>
+            <h2>Report a lost item</h2>
+            <p>Tell us what you’re looking for.</p>
             <span>
-              Report a lost item <ArrowRight size={15} />
+              Start lost report <ArrowRight size={15} />
             </span>
           </div>
           <span className="action-corner">
@@ -102,14 +110,15 @@ export function HomeView({
         </button>
         <button
           className="report-action found-action"
+          aria-label="Report a found item"
           onClick={() => onReport('found')}
         >
           <HeartHandshake size={35} strokeWidth={1.3} />
           <div>
-            <h2>Found something?</h2>
-            <p>A small gesture. A big relief for someone.</p>
+            <h2>Report a found item</h2>
+            <p>Help someone get their item back.</p>
             <span>
-              Report a found item <ArrowRight size={15} />
+              Start found report <ArrowRight size={15} />
             </span>
           </div>
           <span className="action-corner">
@@ -124,7 +133,7 @@ export function HomeView({
           </div>
           <div>
             <h3>
-              A familiar find?{' '}
+              Check your matches{' '}
               <span>
                 {matchCount} possible {matchCount === 1 ? 'match' : 'matches'}
               </span>
@@ -132,7 +141,7 @@ export function HomeView({
             <p>Some recently found items look like the ones you reported.</p>
           </div>
           <span className="match-banner-link">
-            Take a look <ArrowRight size={16} />
+            View matches <ArrowRight size={16} />
           </span>
         </button>
       )}
@@ -140,7 +149,7 @@ export function HomeView({
         <div className="section-heading">
           <div>
             <h2>
-              Fresh finds around campus <span className="small-dot" />
+              Recently found items <span className="small-dot" />
             </h2>
             <p>Recognize something? It could be waiting for you.</p>
           </div>
@@ -163,7 +172,7 @@ export function HomeView({
       <div className="home-lower">
         <section className="my-reports">
           <div className="section-heading">
-            <h2>Your recent activity</h2>
+            <h2>My recent reports</h2>
             <button
               className="text-link"
               onClick={() => onNavigate('activity')}
@@ -206,24 +215,24 @@ export function HomeView({
             <span>CAMPUS SECURITY</span>
           </div>
           <h3>
-            Your belongings.
+            Claim an item.
             <br />
-            Back where they belong.
+            Collect it safely.
           </h3>
           <p>
-            Found items are held safely at the Security Office until their
-            owners are verified.
+            Submit a claim with private identifying details. Wait for approval
+            before arranging a pickup.
           </p>
           <div>
             <MapPin size={14} />
-            <span>Main Entrance, Ground Floor</span>
+            <span>Pickup details in your approval notice</span>
           </div>
           <div>
             <Clock3 size={14} />
-            <span>Mon–Fri, 8:00 AM–5:00 PM</span>
+            <span>Confirm pickup arrangements first</span>
           </div>
           <button className="text-link" onClick={() => onNavigate('help')}>
-            A quick guide to claiming <ArrowUpRight size={14} />
+            How to claim an item <ArrowUpRight size={14} />
           </button>
         </aside>
       </div>

@@ -86,7 +86,7 @@ export function BrowseView({
     <>
       <ViewHeader
         eyebrow="THE CAMPUS NOTICEBOARD"
-        title="Find a familiar thing."
+        title="Browse lost & found items"
         description="One search closer to getting it back."
       >
         <Button onClick={onReport}>
@@ -197,18 +197,21 @@ export function BrowseView({
         <div className="tabs">
           <button
             onClick={() => setType('all')}
+            aria-pressed={type === 'all'}
             className={type === 'all' ? 'active' : ''}
           >
             All items
           </button>
           <button
             onClick={() => setType('found')}
+            aria-pressed={type === 'found'}
             className={type === 'found' ? 'active' : ''}
           >
             Found items
           </button>
           <button
             onClick={() => setType('lost')}
+            aria-pressed={type === 'lost'}
             className={type === 'lost' ? 'active' : ''}
           >
             Lost items

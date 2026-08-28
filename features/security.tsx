@@ -85,7 +85,7 @@ export function SecurityView({ onOpen }: { onOpen: (id: string) => void }) {
     <>
       <ViewHeader
         eyebrow="CAMPUS SECURITY WORKSPACE"
-        title="A safe return starts here."
+        title="Security dashboard"
         description="Review the evidence. Keep a record. Make someone’s day."
       >
         <span className="security-label">
@@ -124,18 +124,21 @@ export function SecurityView({ onOpen }: { onOpen: (id: string) => void }) {
       </div>
       <div className="tabs activity-tabs">
         <button
+          aria-pressed={tab === 'claims'}
           className={tab === 'claims' ? 'active' : ''}
           onClick={() => setTab('claims')}
         >
           Claim review <span>{pending.length}</span>
         </button>
         <button
+          aria-pressed={tab === 'reports'}
           className={tab === 'reports' ? 'active' : ''}
           onClick={() => setTab('reports')}
         >
           All reports
         </button>
         <button
+          aria-pressed={tab === 'log'}
           className={tab === 'log' ? 'active' : ''}
           onClick={() => setTab('log')}
         >

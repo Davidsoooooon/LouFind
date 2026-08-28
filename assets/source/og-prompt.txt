@@ -1,0 +1,10 @@
+Use case: ads-marketing
+Asset type: one social-preview card for a campus lost-and-found app
+Primary request: Create exactly ONE polished landscape social-preview image for LouFind, with canvas dimensions 1200 × 630 pixels (aspect ratio 1200:630).
+Input image 1: supplied LouFind logo, a supporting compositing input. Preserve its visual identity faithfully: navy location-pin silhouette, white magnifying glass and L, gold small location pin, gold three rays, gold check in white circle, navy "Lou" and gold "Find" wordmark. Keep the original geometry, typography, proportions and colors of the supplied logo. This is not a request to redesign the logo.
+Scene/backdrop: pure white background.
+Composition: restrained, spacious horizontal layout. Place the supplied original logo prominently in the left half with generous margins, preserving the original logo lockup. On the right, place a clean left-aligned text block in navy with strong, readable hierarchy: the heading "SLU Lost & Found", then "Saint Louis University", then "Baguio City, Philippines". A small discreet "Unofficial demo" sits near the bottom right. The existing "LouFind" wordmark in the logo supplies the brand name; do not redundantly add a second brand wordmark.
+Text (verbatim, must be visible and correctly spelled): "LouFind", "SLU Lost & Found", "Saint Louis University", "Baguio City, Philippines", "Unofficial demo".
+Style/medium: crisp professional raster brand graphic, clean sans-serif supporting copy, navy and gold from the source logo, abundant white space, legible in a social-link preview.
+Constraints: Use the supplied logo as the authentic app logo. Preserve the logo, keep all artwork and text comfortably inside the 1200 × 630 canvas, and create only one finished card.
+Avoid: the old name FindIt; official university seal; claims of official affiliation; extra slogans; other logos; random decorations, objects, photos, borders, shadows or background gradients.

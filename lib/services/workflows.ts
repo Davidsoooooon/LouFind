@@ -1,4 +1,5 @@
 import { findMatches } from './matching';
+import { createId } from '../browser-crypto';
 import { claimSchema, reportSchema } from '../schemas';
 import type {
   DemoState,
@@ -12,7 +13,7 @@ export function requireUser(state: DemoState) {
   return user;
 }
 const now = () => new Date().toISOString();
-const uid = () => crypto.randomUUID();
+const uid = createId;
 function log(state: DemoState, message: string) {
   state.logs.unshift({
     id: uid(),

@@ -1,5 +1,9 @@
 # dependencies
 /node_modules
+/mobile/node_modules/
+/.expo/
+/mobile/.expo/
+/mobile/dist/
 /.pnp
 .pnp.*
 .yarn/*
@@ -12,7 +16,8 @@
 /coverage
 
 # next.js
-/.next/
+.next/
+.vite/
 /.vinext/
 /out/
 
@@ -36,6 +41,10 @@ next-env.d.ts
 /.wrangler/
 /outputs/
 /work/
+/tmp/
+
+# local generated folder inventories
+\# File Tree: *.md
 
 *.tsbuildinfo
 !/.env.example

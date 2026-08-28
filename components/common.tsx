@@ -54,7 +54,7 @@ export function ViewHeader({
   return (
     <div className="page-heading">
       <div>
-        <div className="eyebrow">{eyebrow || 'FINDIT CAMPUS'}</div>
+        <div className="eyebrow">{eyebrow || 'LOUFIND'}</div>
         <h1>{title}</h1>
         <p>{description}</p>
       </div>

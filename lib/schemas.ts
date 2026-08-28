@@ -1,6 +1,7 @@
 import { z } from 'zod';
 import { CATEGORIES } from './types';
 import { LOCATIONS } from './seed';
+import { CAMPUS } from './campus';
 export const reportSchema = z.object({
   type: z.enum(['lost', 'found']),
   title: z.string().trim().min(3, 'Use at least 3 characters.').max(100),
@@ -51,16 +52,18 @@ export const claimSchema = z.object({
   imageUrl: z.string(),
 });
 export const authSchema = z.object({
+  // Existing custom demo accounts remain usable after a campus identity update.
+  email: z.email('Enter a valid email.').trim(),
+  password: z.string().min(8, 'Use at least 8 characters.').max(128),
+});
+export const registrationSchema = authSchema.extend({
   email: z
     .email('Enter a valid school email.')
     .trim()
     .refine(
-      (v) => /^[^@]+@westbridge\.edu\.ph$/i.test(v),
-      'Use your @westbridge.edu.ph school email.',
+      (v) => v.toLowerCase().endsWith(`@${CAMPUS.emailDomain}`),
+      `Use a sample @${CAMPUS.emailDomain} email for this demo.`,
     ),
-  password: z.string().min(8, 'Use at least 8 characters.').max(128),
-});
-export const registrationSchema = authSchema.extend({
   name: z.string().trim().min(2, 'Enter your full name.').max(80),
   schoolId: z.string().trim().min(4, 'Enter a valid school ID.').max(30),
   role: z.enum(['student', 'staff']),

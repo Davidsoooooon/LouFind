@@ -4,15 +4,16 @@ import {
   ArrowRight,
   GraduationCap,
   LockKeyhole,
-  MapPin,
   ShieldCheck,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { NativeSelect } from '@/components/ui/native-select';
 import { Field } from '@/components/common';
+import { LouFindLogo } from '@/components/loufind-logo';
 import { authSchema, registrationSchema } from '@/lib/schemas';
-import { hashPassword, useDemo } from '@/lib/demo-store';
+import { useDemo } from '@/lib/demo-store';
+import { createId, hashPassword } from '@/lib/browser-crypto';
 import { PROFILES } from '@/lib/seed';
 import type { Role } from '@/lib/types';
 export function AuthView() {
@@ -70,9 +71,9 @@ export function AuthView() {
           throw new Error(
             'This school email or ID already has a demo account.',
           );
-        const salt = crypto.randomUUID(),
+        const salt = createId(),
           passwordHash = await hashPassword(password, salt),
-          id = crypto.randomUUID();
+          id = createId();
         transact((s) => ({
           ...s,
           profiles: [
@@ -100,15 +101,14 @@ export function AuthView() {
     <div className="auth-page">
       <div className="auth-story">
         <div className="brand">
-          <span className="brand-mark">
-            <MapPin size={27} />
-          </span>
-          <span>
-            FindIt<span className="brand-campus">CAMPUS</span>
+          <LouFindLogo />
+          <span className="loufind-wordmark">
+            Lou<span>Find</span>
+            <small>SLU LOST &amp; FOUND</small>
           </span>
         </div>
         <div>
-          <span className="eyebrow">WESTBRIDGE UNIVERSITY · DEMO CAMPUS</span>
+          <span className="eyebrow">SAINT LOUIS UNIVERSITY · BAGUIO</span>
           <h1>
             Things get lost.
             <br />
@@ -127,19 +127,24 @@ export function AuthView() {
             </span>
           </div>
         </div>
-        <small>Local prototype · Sample accounts and data</small>
+        <small>
+          Unofficial SLU Baguio prototype · Sample accounts and data
+        </small>
       </div>
       <div className="auth-form">
         <div className="auth-form-inner">
           <GraduationCap size={30} strokeWidth={1.4} />
-          <h2>{mode === 'login' ? 'Welcome back.' : 'Join your campus.'}</h2>
+          <h2>
+            {mode === 'login' ? 'Welcome back.' : 'Create a demo account.'}
+          </h2>
           <p>
             {mode === 'login'
-              ? 'Your lost-and-found noticeboard is right here.'
+              ? 'Sign in to your local demo account.'
               : 'Create a demo account to report and find items.'}
           </p>
           <div className="tabs">
             <button
+              aria-pressed={mode === 'login'}
               className={mode === 'login' ? 'active' : ''}
               onClick={() => {
                 setMode('login');
@@ -149,6 +154,7 @@ export function AuthView() {
               Sign in
             </button>
             <button
+              aria-pressed={mode === 'register'}
               className={mode === 'register' ? 'active' : ''}
               onClick={() => {
                 setMode('register');
@@ -198,7 +204,7 @@ export function AuthView() {
                 id="auth-email"
                 autoComplete="email"
                 type="email"
-                placeholder="you@westbridge.edu.ph"
+                placeholder="you@slu.edu.ph"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required

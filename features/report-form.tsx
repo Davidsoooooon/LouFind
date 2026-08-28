@@ -25,6 +25,7 @@ import {
 } from '@/lib/types';
 import { COLORS, reportSchema } from '@/lib/schemas';
 import { LOCATIONS, formatDate, locationName } from '@/lib/seed';
+import { createId } from '@/lib/browser-crypto';
 export function ReportForm({
   type,
   initial,
@@ -41,7 +42,7 @@ export function ReportForm({
     [error, setError] = useState(''),
     [success, setSuccess] = useState(''),
     [saved, setSaved] = useState(false);
-  const [id] = useState(() => initial?.id || crypto.randomUUID());
+  const [id] = useState(() => initial?.id || createId());
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const saveRef = useRef(onSave);
   saveRef.current = onSave;
@@ -148,12 +149,12 @@ export function ReportForm({
           ? 'Report received'
           : initial
             ? 'Continue your report'
-            : 'Let’s bring it back'
+            : 'Report an item'
       }
       description={
         success
           ? 'Your campus community can now help.'
-          : 'A few details can make all the difference.'
+          : 'Choose lost or found, add details, then review your report.'
       }
       onClose={close}
     >
@@ -169,14 +170,18 @@ export function ReportForm({
             identifying details are only shown to security.
           </p>
           <Button onClick={onClose}>
-            Back to campus <ArrowRight size={16} />
+            Done <ArrowRight size={16} />
           </Button>
         </div>
       ) : (
         <>
           <div className="form-steps">
             {['The item', 'When & where', 'Review'].map((s, i) => (
-              <div key={s} className={i <= step ? 'current' : ''}>
+              <div
+                key={s}
+                className={i <= step ? 'current' : ''}
+                aria-current={i === step ? 'step' : undefined}
+              >
                 <span>{i < step ? <Check size={13} /> : i + 1}</span>
                 {s}
               </div>
@@ -195,6 +200,7 @@ export function ReportForm({
                   <div className="segmented-control report-type">
                     <button
                       type="button"
+                      aria-pressed={data.type === 'lost'}
                       className={data.type === 'lost' ? 'selected' : ''}
                       onClick={() =>
                         setValue('type', 'lost', { shouldDirty: true })
@@ -204,6 +210,7 @@ export function ReportForm({
                     </button>
                     <button
                       type="button"
+                      aria-pressed={data.type === 'found'}
                       className={data.type === 'found' ? 'selected' : ''}
                       onClick={() =>
                         setValue('type', 'found', { shouldDirty: true })

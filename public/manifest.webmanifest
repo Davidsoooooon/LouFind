@@ -1,1 +1,25 @@
-{"id":"/","name":"FindIt Campus","short_name":"FindIt","description":"Your campus lost and found. A little help. A happy reunion.","start_url":"/","scope":"/","display":"standalone","background_color":"#f8f9f6","theme_color":"#263e43","icons":[{"src":"/icon-192.png","sizes":"192x192","type":"image/png","purpose":"any maskable"},{"src":"/icon-512.png","sizes":"512x512","type":"image/png","purpose":"any maskable"}]}
+{
+  "id": "/",
+  "name": "LouFind",
+  "short_name": "LouFind",
+  "description": "LouFind — SLU Lost & Found. An unofficial demo for Saint Louis University, Baguio City, Philippines.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#073779",
+  "icons": [
+    {
+      "src": "/loufind-icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/loufind-icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}

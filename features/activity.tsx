@@ -42,8 +42,8 @@ export function ActivityView({
   return (
     <>
       <ViewHeader
-        title="Your campus trail."
-        description="Reports, claims, and a few things you’re keeping an eye on."
+        title="My reports & claims"
+        description="Track your reports, check claims, and continue saved drafts."
       >
         <Button onClick={onReport}>
           <Plus size={16} />
@@ -54,6 +54,7 @@ export function ActivityView({
         {TABS.map(([id, label]) => (
           <button
             key={id}
+            aria-pressed={tab === id}
             className={tab === id ? 'active' : ''}
             onClick={() => setTab(id)}
           >

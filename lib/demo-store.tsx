@@ -2,7 +2,9 @@
 'use client';
 import { createContext, useContext, useEffect, useRef, useState } from 'react';
 import { createSeed } from './seed';
+import { migrateCampusIdentity } from './services/campus-identity';
 import type { DemoState } from './types';
+// Keep the legacy key so the LouFind rename preserves existing device-local data.
 const KEY = 'findit-campus-demo-v1';
 interface Store {
   state: DemoState;
@@ -32,8 +34,18 @@ export function DemoProvider({ children }: { children: React.ReactNode }) {
           !parsed.saved
         )
           throw new Error('Invalid local data');
-        current.current = parsed;
-        setState(parsed);
+        const migrated = migrateCampusIdentity(parsed);
+        current.current = migrated;
+        setState(migrated);
+        if (migrated !== parsed) {
+          try {
+            localStorage.setItem(KEY, JSON.stringify(migrated));
+          } catch {
+            setError(
+              'Your saved data is loaded, but the campus update could not be saved. Free browser storage before making changes.',
+            );
+          }
+        }
       }
     } catch {
       setError(
@@ -76,26 +88,4 @@ export function useDemo() {
   const value = useContext(Context);
   if (!value) throw new Error('DemoProvider is required');
   return value;
-}
-export async function hashPassword(password: string, salt: string) {
-  const key = await crypto.subtle.importKey(
-    'raw',
-    new TextEncoder().encode(password),
-    'PBKDF2',
-    false,
-    ['deriveBits'],
-  );
-  const bits = await crypto.subtle.deriveBits(
-    {
-      name: 'PBKDF2',
-      salt: new TextEncoder().encode(salt),
-      iterations: 100000,
-      hash: 'SHA-256',
-    },
-    key,
-    256,
-  );
-  return Array.from(new Uint8Array(bits))
-    .map((n) => n.toString(16).padStart(2, '0'))
-    .join('');
 }

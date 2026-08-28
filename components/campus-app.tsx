@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { NativeSelect } from '@/components/ui/native-select';
 import { Modal } from './common';
 import { CampusShell } from './campus-shell';
+import { AppLoading } from './app-loading';
 import { HomeView } from '@/features/home';
 import { BrowseView } from '@/features/browse';
 import { ActivityView } from '@/features/activity';
@@ -42,6 +43,7 @@ export default function CampusApp() {
 }
 function Workspace() {
   const { state, ready, error, transact, reset } = useDemo();
+  const [introComplete, setIntroComplete] = useState(false);
   const [page, setPage] = useState<Page>('home'),
     [query, setQuery] = useState(''),
     [activityTab, setActivityTab] = useState('lost'),
@@ -64,8 +66,14 @@ function Workspace() {
     (n) => n.userId === profile?.id && !n.read,
   ).length;
   useEffect(() => {
+    // Keep the first paint legible without delaying later in-app navigation.
+    const timer = window.setTimeout(() => setIntroComplete(true), 900);
+    return () => window.clearTimeout(timer);
+  }, []);
+  useEffect(() => {
     function sync() {
       const [p, search] = location.hash.slice(1).split('?');
+      if (p === 'main-content') return;
       setPage(PAGES.includes(p as Page) ? (p as Page) : 'home');
       const params = new URLSearchParams(search);
       setSelected(params.get('item'));
@@ -100,6 +108,9 @@ function Workspace() {
     if (tab) setActivityTab(tab);
     history.pushState(null, '', `#${next}${tab ? `?tab=${tab}` : ''}`);
     window.scrollTo({ top: 0, behavior: 'instant' });
+    requestAnimationFrame(() =>
+      document.getElementById('main-content')?.focus({ preventScroll: true }),
+    );
   }
   function open(id: string) {
     setSelected(id);
@@ -178,13 +189,7 @@ function Workspace() {
     },
     [profile, state.reports, transact],
   );
-  if (!ready)
-    return (
-      <div className="app-loading">
-        <span className="loading-mark">F.</span>
-        <p>Opening your campus noticeboard…</p>
-      </div>
-    );
+  if (!ready || !introComplete) return <AppLoading />;
   if (!profile) return <AuthView />;
   const shared = {
     state,
@@ -202,12 +207,14 @@ function Workspace() {
   return (
     <CampusShell
       page={page}
+      activityTab={activityTab}
       profile={profile}
       unread={unread}
       matchCount={mine.length}
       onNavigate={navigate}
       onRole={role}
       onAccount={() => setAccount(true)}
+      onReport={() => setReport({ type: 'lost' })}
     >
       {error && (
         <div className="error-note" role="alert">

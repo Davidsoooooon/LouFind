@@ -23,6 +23,7 @@ import { claimSchema } from '@/lib/schemas';
 import { formatDate, locationName } from '@/lib/seed';
 import { findMatches } from '@/lib/services/matching';
 import { submitClaim } from '@/lib/services/workflows';
+import { createId } from '@/lib/browser-crypto';
 export function ItemDetails({
   id,
   onClose,
@@ -121,7 +122,7 @@ export function ItemDetails({
               transact((s) =>
                 submitClaim(s, {
                   ...data,
-                  id: crypto.randomUUID(),
+                  id: createId(),
                   reportId: id,
                   claimantId: user.id,
                   status: 'Under Review',

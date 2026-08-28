@@ -1,6 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { createSeed } from '../lib/seed';
+import { migrateCampusIdentity } from '../lib/services/campus-identity';
 import { findMatches, scoreMatch } from '../lib/services/matching';
 import {
   manageReport,
@@ -8,7 +9,12 @@ import {
   saveReport,
   submitClaim,
 } from '../lib/services/workflows';
-import { claimSchema, reportSchema, registrationSchema } from '../lib/schemas';
+import {
+  claimSchema,
+  reportSchema,
+  registrationSchema,
+  authSchema,
+} from '../lib/schemas';
 import type { OwnershipClaim } from '../lib/types';
 const claim: OwnershipClaim = {
   id: 'test-claim',
@@ -190,7 +196,7 @@ void test('registration requires school email and cannot assign security role', 
   const v = {
     name: 'Test Student',
     schoolId: '2026-0011',
-    email: 'test@westbridge.edu.ph',
+    email: 'test@slu.edu.ph',
     password: 'SampleOnly123!',
     role: 'student',
   };
@@ -248,4 +254,88 @@ void test('only an explicitly linked owned lost report closes after a verified r
   s = manageReport(s, '104', 'Returned', 'Cabinet B');
   assert.equal(s.reports.find((r) => r.id === '201')?.status, 'Returned');
   assert.equal(s.reports.find((r) => r.id === '202')?.status, 'Possible Match');
+});
+
+void test('campus identity migration preserves reports, claims, credentials, and custom profiles', () => {
+  const state = createSeed();
+  state.profiles = state.profiles.map((p) => ({
+    ...p,
+    email: p.email.replace('@slu.edu.ph', '@westbridge.edu.ph'),
+  }));
+  state.profiles.push({
+    id: 'custom',
+    name: 'Test User',
+    email: 'custom@westbridge.edu.ph',
+    schoolId: 'DEMO-999',
+    role: 'student',
+    salt: 'test-salt',
+    passwordHash: 'test-hash',
+  });
+  state.currentUserId = 'custom';
+  const snapshot = structuredClone(state);
+  const migrated = migrateCampusIdentity(state);
+  assert.equal(
+    migrated.profiles.find((p) => p.id === 'jamie')?.email,
+    'jamie@slu.edu.ph',
+  );
+  assert.deepEqual(
+    migrated.profiles.find((p) => p.id === 'custom'),
+    snapshot.profiles.find((p) => p.id === 'custom'),
+  );
+  assert.deepEqual(
+    { ...migrated, profiles: [] },
+    { ...snapshot, profiles: [] },
+  );
+  assert.deepEqual(state, snapshot);
+  assert.equal(migrateCampusIdentity(migrated), migrated);
+});
+void test('SLU registration rejects lookalike domains while legacy custom accounts can still sign in', () => {
+  const account = {
+    name: 'Test User',
+    email: 'student@SLU.EDU.PH',
+    schoolId: 'DEMO-100',
+    password: 'DemoPassword123!',
+    role: 'student',
+  };
+  assert(registrationSchema.safeParse(account).success);
+  for (const email of [
+    'user@slu.edu.ph.fake.test',
+    'user@notslu.edu.ph',
+    'user@westbridge.edu.ph',
+    'user@slu.edu',
+  ]) {
+    assert(!registrationSchema.safeParse({ ...account, email }).success);
+  }
+  assert(
+    authSchema.safeParse({
+      email: 'custom@westbridge.edu.ph',
+      password: 'DemoPassword123!',
+    }).success,
+  );
+});
+
+void test('Baguio correction migrates US sample addresses without rewriting custom accounts', () => {
+  const state = createSeed();
+  state.profiles = state.profiles.map((p) => ({
+    ...p,
+    email: p.email.replace('@slu.edu.ph', '@slu.edu'),
+  }));
+  state.profiles.push({
+    id: 'custom-us',
+    name: 'Test User',
+    email: 'custom@slu.edu',
+    schoolId: 'TEST-900',
+    role: 'student',
+  });
+  const corrected = migrateCampusIdentity(state);
+  assert.equal(
+    corrected.profiles.find((p) => p.id === 'jamie')?.email,
+    'jamie@slu.edu.ph',
+  );
+  assert.equal(
+    corrected.profiles.find((p) => p.id === 'custom-us')?.email,
+    'custom@slu.edu',
+  );
+  assert.deepEqual({ ...corrected, profiles: [] }, { ...state, profiles: [] });
+  assert.equal(migrateCampusIdentity(corrected), corrected);
 });

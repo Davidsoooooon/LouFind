@@ -1,0 +1,26 @@
+{
+  "expo": {
+    "name": "LouFind",
+    "slug": "loufind-mobile",
+    "version": "0.1.0",
+    "orientation": "default",
+    "userInterfaceStyle": "light",
+    "icon": "./assets/icon.png",
+    "splash": {
+      "image": "./assets/logo.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "ios": {
+      "supportsTablet": true,
+      "infoPlist": {
+        "NSLocalNetworkUsageDescription": "Connect to the LouFind preview running on your Mac over the same Wi-Fi.",
+        "NSPhotoLibraryUsageDescription": "Choose an item photo or sample ownership evidence for a LouFind report.",
+        "NSCameraUsageDescription": "Take an item photo for a LouFind report.",
+        "NSAppTransportSecurity": {
+          "NSAllowsLocalNetworking": true
+        }
+      }
+    }
+  }
+}

@@ -1,8 +1,34 @@
-# FindIt Campus
+# LouFind
 
-A functional, responsive campus lost-and-found prototype. The initial screen opens as **Jamie Santos**, a sample student, with reports, matches, claims, and notifications ready to explore.
+A functional, responsive campus lost-and-found prototype themed for **Saint Louis University in Baguio City, Philippines (slu.edu.ph)**. This is an **unofficial demo**, not an SLU service. The initial screen opens as **Jamie Santos**, a sample student, with reports, matches, claims, and notifications ready to explore.
+
+## User guide
+
+Read the [project overview and user guide (PDF)](output/pdf/LouFind_Project_Overview_and_User_Guide.pdf) for a friendly walkthrough of reporting, matching, claims, security review, iPhone setup, privacy, and troubleshooting.
+
+## Campus theme and navigation
+
+The theme uses the supplied LouFind logo with deep blue `#073779`, white, and gold `#f2b21b`. These interface shades are design choices, not official university color specifications. No university seal is used. Campus locations, pickup workflows, staff names, IDs, and accounts are sample data.
+
+On phones and narrow tablets, the bottom menu provides **Home, Browse, Report, My reports, and More**. More contains matches, notifications, claims, saved items, help, and account/demo role settings; security accounts also get the security dashboard. The **Report** button is available from every screen. Activity tabs wrap into visible buttons on small screens. The layout uses larger text, 44px-or-larger main controls, labeled selected states, visible keyboard focus, and a working skip link.
+
+Existing local data is preserved during the university change. `migrateCampusIdentity` updates only the original sample accounts’ Westbridge or U.S. SLU email addresses; it does not alter reports, claims, photos, saved items, passwords, or custom accounts. The migration is idempotent and covered by tests.
+
+## Loading and app identity
+
+The supplied logo appears in desktop/mobile headers, sign-in, startup, offline help, and installed-app icons. The shared `AppLoading` component also serves the App Router loading fallback. Launch displays the logo for at least 900ms after hydration and waits for local data readiness; ordinary in-app navigation does not replay it. The indicator is indeterminate, exposes a polite loading status, and stops moving when reduced motion is requested. The layout adapts to small screens and device safe areas.
+
+The installed app name is **LouFind**. Existing browser data deliberately keeps its original storage key, and the manifest keeps its `/` identity, so renaming does not create a fresh data store. The production worker replaces older branded offline caches and caches the new offline logo. Installed shortcuts may require reopening or reinstalling before the operating system refreshes their labels/icons; native device installation has not been verified.
 
 ## Run locally
+
+### Preview on your iPhone with Expo Go
+
+Install [Expo Go on the iPhone](https://apps.apple.com/ph/app/expo-go/id982107779). With both devices on the same private Wi-Fi, run `npm run dev:lan` in one terminal and `npm run phone` in another. Scan `outputs/loufind-expo-qr.png` with the iPhone Camera and allow Local Network access.
+
+For the first setup, install the separate companion dependencies with `npm --prefix mobile install`. The companion uses App Store-compatible Expo SDK 54 and displays the existing website in a native WebView. Keep the Mac awake and both commands running. Each device has separate local demo data. See [the mobile guide](mobile/README.md) for setup, compatibility, and troubleshooting.
+
+### Website development
 
 Requires Node.js **22.13 or newer** and npm.
 
@@ -25,16 +51,16 @@ No Supabase account, credentials, external image host, or API key is required. T
 
 ## Demo accounts
 
-All sample accounts use **Campus123!**. Open the avatar and choose **Sign out / change account** to see sign-in and registration. The role switcher is available in the desktop sidebar and the account dialog on mobile.
+All sample accounts use **Campus123!**. Open the avatar and choose **Sign out / change account** to see sign-in and registration. The role switcher is available in the desktop sidebar and via **More → Account & demo roles** on mobile.
 
-| Role                        | Email                      | School ID  |
-| --------------------------- | -------------------------- | ---------- |
-| Student · Jamie Santos      | jamie@westbridge.edu.ph    | 2024-01482 |
-| Student · Mika Reyes        | mika@westbridge.edu.ph     | 2023-00836 |
-| Faculty/staff · Alex Rivera | alex@westbridge.edu.ph     | ST-00124   |
-| Security · Officer Cruz     | security@westbridge.edu.ph | SEC-0018   |
+| Role                        | Email               | School ID  |
+| --------------------------- | ------------------- | ---------- |
+| Student · Jamie Santos      | jamie@slu.edu.ph    | 2024-01482 |
+| Student · Mika Reyes        | mika@slu.edu.ph     | 2023-00836 |
+| Faculty/staff · Alex Rivera | alex@slu.edu.ph     | ST-00124   |
+| Security · Officer Cruz     | security@slu.edu.ph | SEC-0018   |
 
-Registration accepts sample `@westbridge.edu.ph` emails. New demo passwords are stored as salted PBKDF2-SHA256 hashes (100,000 iterations). **This is not production authentication.** The deliberate role switcher and local browser data mean there is no real security boundary. Use test passwords and fabricated evidence only. Registration cannot assign the security role.
+Registration accepts fabricated `@slu.edu.ph` emails for testing only; no email is sent and no SLU sign-in is performed. Existing custom demo accounts keep their original email and can still sign in. New demo passwords are stored as salted PBKDF2-SHA256 hashes (100,000 iterations). **This is not production authentication.** The deliberate role switcher and local browser data mean there is no real security boundary. Use test passwords and fabricated evidence only. Registration cannot assign the security role.
 
 ## A complete demo flow
 
@@ -107,9 +133,11 @@ Candidates require opposite report types, different reporters, the same category
 - Data survives reloads in this browser. Clearing site data or **Reset demo data** deletes its reports, photos, and registered accounts. Browser quota failures are surfaced and changes are not silently marked saved.
 - Private fields are hidden from public UI, not cryptographically protected from the device owner. Do not store real identity documents or confidential reports.
 - Supabase integration and server-enforced RLS are **not implemented**. A production version needs Supabase Auth, Postgres migrations and RLS, authenticated server endpoints, private storage with signed URLs, upload moderation, secure security-role provisioning, and an audited handover process. Never reuse the client demo role checks as server authorization.
-- The campus, people, dates, sample IDs and reports are fictional. Sample item photographs are original generated illustrations of the reports, not real recovered possessions.
+- The university is real; people, sample locations, dates, IDs and reports in the demo are fictional. Sample item photographs are original generated illustrations of the reports, not real recovered possessions.
 - Social metadata is site-wide because the records and item routes are local to the browser. Set the trusted `PUBLIC_SITE_URL` for the deployed origin. Do not derive it from untrusted forwarded headers.
 
 ## Imagery
 
-Four sample photographs and the social card were generated with the built-in imagegen tool. Source assets are in `assets/source/`; optimized runtime images are in `public/images/` and `public/og.png`. Their briefs: folded blue umbrella on pale stone; white earbuds in open case on warm gray; anonymous face-down student card with sage lanyard; black scientific calculator on gray; off-white FindIt Campus card with the exact line “A little help. A happy reunion.” Original photos contain no real personal information. `node scripts/prepare-assets.mjs` recreates the optimized outputs and PNG app icons.
+The supplied LouFind artwork is preserved in `assets/source/loufind-logo.png` and optimized as `public/brand/loufind-logo.webp`. Compact headers show its symbol through a CSS viewport; full-logo views and app icons retain the whole artwork. The original user file is untouched.
+
+Four sample photographs and the social card were generated with the built-in imagegen tool. Source assets are in `assets/source/`; optimized runtime images are in `public/images/` and `public/og.png`. Photo briefs: folded blue umbrella on pale stone; white earbuds in an open case on warm gray; anonymous face-down student card with a sage lanyard; black scientific calculator on gray. The current social card uses the supplied logo as a reference and identifies LouFind, SLU Lost & Found, Saint Louis University, Baguio City, Philippines, and an unofficial demo. Its prompt is saved in `assets/source/og-prompt.txt`. Sample photographs contain no real personal information. `node scripts/prepare-assets.mjs` recreates the optimized outputs and PNG app icons.
