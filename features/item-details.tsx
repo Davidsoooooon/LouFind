@@ -152,7 +152,7 @@ export function ItemDetails({
                 id="claim-lost-report"
                 {...register('lostReportId')}
               >
-                <option value="">I haven't filed a lost report</option>
+                <option value="">I haven’t filed a lost report</option>
                 {state.reports
                   .filter(
                     (r) =>
